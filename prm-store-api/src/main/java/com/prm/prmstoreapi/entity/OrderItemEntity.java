@@ -1,5 +1,6 @@
 package com.prm.prmstoreapi.entity;
 
+import com.prm.prmstoreapi.model.OrderItemModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,4 +33,10 @@ public class OrderItemEntity {
 
     @Column(name = "discount", columnDefinition = "decimal (4, 2) not null default 0")
     private float discount;
+
+    public OrderItemEntity(OrderItemModel model) {
+        this.quantity = model.getQuantity();
+        this.list_price = model.getList_price();
+        this.discount = model.getDiscount();
+    }
 }

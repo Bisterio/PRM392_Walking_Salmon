@@ -1,5 +1,6 @@
 package com.prm.prmstoreapi.entity;
 
+import com.prm.prmstoreapi.model.StockModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,4 +27,8 @@ public class StockEntity {
 
     @Column(name = "quantity", columnDefinition = "int")
     private int quantity;
+
+    public StockEntity(StockModel model) {
+        this.quantity = model.getQuantity();
+    }
 }

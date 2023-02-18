@@ -1,5 +1,6 @@
 package com.prm.prmstoreapi.entity;
 
+import com.prm.prmstoreapi.model.StaffModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,7 +46,7 @@ public class StaffEntity {
     @CreationTimestamp
     private LocalDateTime created_at;
 
-    @Column(updatable = false)
+    @Column
     @UpdateTimestamp
     private LocalDateTime updated_at;
 
@@ -53,4 +54,12 @@ public class StaffEntity {
     @JoinColumn(name = "manager_id")
     @NotFound(action= NotFoundAction.IGNORE)
     StaffEntity manager;
+
+    public StaffEntity(StaffModel model) {
+        this.first_name = model.getFirst_name();
+        this.last_name = model.getLast_name();
+        this.email = model.getEmail();
+        this.phone = model.getPhone();
+        this.active = model.isActive();
+    }
 }

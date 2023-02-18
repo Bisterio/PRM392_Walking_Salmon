@@ -1,22 +1,21 @@
 package com.prm.prmstoreapi.model;
 
-import com.prm.prmstoreapi.entity.OrderEntity;
 import com.prm.prmstoreapi.entity.OrderItemEntity;
-import com.prm.prmstoreapi.entity.ProductEntity;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderItemModel {
+public class OrderItemModel implements Serializable {
     private Long id;
 
-    OrderEntity order;
+    OrderModel order;
 
-    ProductEntity product;
+    ProductModel product;
 
     private int quantity;
 
@@ -26,8 +25,6 @@ public class OrderItemModel {
 
     public OrderItemModel(OrderItemEntity entity) {
         this.id = entity.getId();
-        this.order = entity.getOrder();
-        this.product = entity.getProduct();
         this.quantity = entity.getQuantity();
         this.list_price = entity.getList_price();
         this.discount = entity.getDiscount();

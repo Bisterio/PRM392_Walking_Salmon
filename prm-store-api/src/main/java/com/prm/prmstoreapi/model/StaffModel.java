@@ -30,7 +30,7 @@ public class StaffModel {
 
     private boolean active;
 
-    StoreEntity store;
+    StoreModel store;
 
     private String created_at;
 
@@ -45,7 +45,6 @@ public class StaffModel {
         this.email = entity.getEmail();
         this.phone = entity.getPhone();
         this.active = entity.isActive();
-        this.store = entity.getStore();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss");
         this.created_at = entity.getCreated_at().format(formatter);
         this.updated_at = entity.getUpdated_at().format(formatter);

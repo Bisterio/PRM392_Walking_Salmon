@@ -8,13 +8,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerModel {
+public class CustomerModel implements Serializable {
     private Long id;
 
     private String first_name;

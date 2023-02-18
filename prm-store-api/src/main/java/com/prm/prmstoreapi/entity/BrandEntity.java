@@ -1,5 +1,6 @@
 package com.prm.prmstoreapi.entity;
 
+import com.prm.prmstoreapi.model.BrandModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,4 +19,8 @@ public class BrandEntity {
 
     @Column(name = "brand_name", columnDefinition = "varchar(255) not null")
     private String brand_name;
+
+    public BrandEntity(BrandModel model) {
+        this.brand_name = model.getBrand_name();
+    }
 }

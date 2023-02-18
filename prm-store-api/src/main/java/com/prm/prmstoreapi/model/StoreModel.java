@@ -1,15 +1,10 @@
 package com.prm.prmstoreapi.model;
 
-import com.prm.prmstoreapi.entity.StockEntity;
 import com.prm.prmstoreapi.entity.StoreEntity;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -33,7 +28,7 @@ public class StoreModel {
 
     private String zip_code;
 
-    private List<StockEntity> stockList;
+    private List<StockModel> stockList;
 
     private String created_at;
 

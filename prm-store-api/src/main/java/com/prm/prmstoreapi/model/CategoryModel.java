@@ -1,16 +1,16 @@
 package com.prm.prmstoreapi.model;
 
-import com.prm.prmstoreapi.entity.BrandEntity;
 import com.prm.prmstoreapi.entity.CategoryEntity;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryModel {
+public class CategoryModel implements Serializable {
     private Long id;
 
     private String category_name;

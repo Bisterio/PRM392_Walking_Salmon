@@ -1,5 +1,6 @@
 package com.prm.prmstoreapi.entity;
 
+import com.prm.prmstoreapi.model.ProductModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -51,7 +52,15 @@ public class ProductEntity {
     @CreationTimestamp
     private LocalDateTime created_at;
 
-    @Column(updatable = false)
+    @Column
     @UpdateTimestamp
     private LocalDateTime updated_at;
+
+    public ProductEntity(ProductModel model) {
+        this.product_name = model.getProduct_name();
+        this.image = model.getImage();
+        this.description = model.getDescription();
+        this.model_year = model.getModel_year();
+        this.list_price = model.getList_price();
+    }
 }

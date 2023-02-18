@@ -1,5 +1,6 @@
 package com.prm.prmstoreapi.entity;
 
+import com.prm.prmstoreapi.model.CategoryModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,4 +19,8 @@ public class CategoryEntity {
 
     @Column(name = "category_name", columnDefinition = "varchar(255) not null")
     private String category_name;
+
+    public CategoryEntity(CategoryModel model) {
+        this.category_name = model.getCategory_name();
+    }
 }

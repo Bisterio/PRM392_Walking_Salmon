@@ -1,5 +1,6 @@
 package com.prm.prmstoreapi.entity;
 
+import com.prm.prmstoreapi.model.StoreModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -49,7 +50,17 @@ public class StoreEntity {
     @CreationTimestamp
     private LocalDateTime created_at;
 
-    @Column(updatable = false)
+    @Column
     @UpdateTimestamp
     private LocalDateTime updated_at;
+
+    public StoreEntity(StoreModel model) {
+        this.name = model.getName();
+        this.phone = model.getPhone();
+        this.email = model.getEmail();
+        this.street = model.getStreet();
+        this.city = model.getCity();
+        this.state = model.getState();
+        this.zip_code = model.getZip_code();
+    }
 }

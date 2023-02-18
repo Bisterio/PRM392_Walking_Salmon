@@ -1,5 +1,6 @@
 package com.prm.prmstoreapi.entity;
 
+import com.prm.prmstoreapi.model.OrderModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Data
@@ -40,7 +42,7 @@ public class OrderEntity {
     @CreationTimestamp
     private LocalDateTime created_at;
 
-    @Column(updatable = false)
+    @Column
     @UpdateTimestamp
     private LocalDateTime updated_at;
 
@@ -51,4 +53,12 @@ public class OrderEntity {
     @ManyToOne
     @JoinColumn(name = "staff_id")
     StaffEntity staff;
+
+    public OrderEntity(OrderModel model) {
+        this.order_status = model.getOrder_status();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss");
+        this.order_date = LocalDateTime.parse(model.getOrder_date(), formatter);
+        this.required_date = LocalDateTime.parse(model.getRequired_date(), formatter);
+        this.shipped_date = LocalDateTime.parse(model.getShipped_date(), formatter);
+    }
 }

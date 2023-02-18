@@ -11,4 +11,6 @@ public class UrlConstant {
     public static final String STAFFS = "staffs";
     public static final String STOCK = "stocks";
     public static final String STORES = "stores";
+    public static final String COUNT = "count";
+    public static final String DETAIL = "detail";
 }
