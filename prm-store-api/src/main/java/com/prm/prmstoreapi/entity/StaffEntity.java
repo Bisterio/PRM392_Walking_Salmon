@@ -23,16 +23,16 @@ public class StaffEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name", columnDefinition = "varchar(50) not null")
+    @Column(name = "first_name", columnDefinition = "nvarchar(50) not null")
     private String first_name;
 
-    @Column(name = "last_name", columnDefinition = "varchar(50) not null")
+    @Column(name = "last_name", columnDefinition = "nvarchar(50) not null")
     private String last_name;
 
-    @Column(name = "email", columnDefinition = "varchar(255) not null unique")
+    @Column(name = "email", columnDefinition = "nvarchar(255) not null unique")
     private String email;
 
-    @Column(name = "phone", columnDefinition = "varchar(25)")
+    @Column(name = "phone", columnDefinition = "nvarchar(25)")
     private String phone;
 
     @Column(name = "active", columnDefinition = "tinyint not null")

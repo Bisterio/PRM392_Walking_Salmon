@@ -22,25 +22,25 @@ public class StoreEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "store_name", columnDefinition = "varchar(255) not null")
+    @Column(name = "store_name", columnDefinition = "nvarchar(255) not null")
     private String name;
 
-    @Column(name = "phone", columnDefinition = "varchar(25)")
+    @Column(name = "phone", columnDefinition = "nvarchar(25)")
     private String phone;
 
-    @Column(name = "email", columnDefinition = "varchar(255)")
+    @Column(name = "email", columnDefinition = "nvarchar(255)")
     private String email;
 
-    @Column(name = "street", columnDefinition = "varchar(255)")
+    @Column(name = "street", columnDefinition = "nvarchar(255)")
     private String street;
 
-    @Column(name = "city", columnDefinition = "varchar(255)")
+    @Column(name = "city", columnDefinition = "nvarchar(255)")
     private String city;
 
-    @Column(name = "state", columnDefinition = "varchar(10)")
+    @Column(name = "state", columnDefinition = "nvarchar(10)")
     private String state;
 
-    @Column(name = "zip_code", columnDefinition = "varchar(5)")
+    @Column(name = "zip_code", columnDefinition = "nvarchar(5)")
     private String zip_code;
 
     @OneToMany(mappedBy = "store")

@@ -41,6 +41,8 @@ public class ProductModel {
         this.description = entity.getDescription();
         this.model_year = entity.getModel_year();
         this.list_price = entity.getList_price();
+        this.brand = new BrandModel(entity.getBrand());
+        this.category = new CategoryModel(entity.getCategory());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss");
         this.created_at = entity.getCreated_at().format(formatter);
         this.updated_at = entity.getUpdated_at().format(formatter);

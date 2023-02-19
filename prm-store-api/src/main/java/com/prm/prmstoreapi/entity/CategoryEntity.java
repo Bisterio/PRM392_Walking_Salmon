@@ -17,7 +17,7 @@ public class CategoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "category_name", columnDefinition = "varchar(255) not null")
+    @Column(name = "category_name", columnDefinition = "nvarchar(255) not null")
     private String category_name;
 
     public CategoryEntity(CategoryModel model) {

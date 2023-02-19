@@ -17,7 +17,7 @@ public class BrandEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "brand_name", columnDefinition = "varchar(255) not null")
+    @Column(name = "brand_name", columnDefinition = "nvarchar(255) not null")
     private String brand_name;
 
     public BrandEntity(BrandModel model) {

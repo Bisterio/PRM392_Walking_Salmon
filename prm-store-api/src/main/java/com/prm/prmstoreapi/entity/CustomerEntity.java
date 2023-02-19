@@ -21,28 +21,28 @@ public class CustomerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name", columnDefinition = "varchar(255) not null")
+    @Column(name = "first_name", columnDefinition = "nvarchar(255) not null")
     private String first_name;
 
-    @Column(name = "last_name", columnDefinition = "varchar(255) not null")
+    @Column(name = "last_name", columnDefinition = "nvarchar(255) not null")
     private String last_name;
 
-    @Column(name = "email", columnDefinition = "varchar(255) not null")
+    @Column(name = "email", columnDefinition = "nvarchar(255) not null")
     private String email;
 
-    @Column(name = "phone", columnDefinition = "varchar(25)")
+    @Column(name = "phone", columnDefinition = "nvarchar(25)")
     private String phone;
 
-    @Column(name = "street", columnDefinition = "varchar(255)")
+    @Column(name = "street", columnDefinition = "nvarchar(255)")
     private String street;
 
-    @Column(name = "city", columnDefinition = "varchar(50)")
+    @Column(name = "city", columnDefinition = "nvarchar(50)")
     private String city;
 
-    @Column(name = "state", columnDefinition = "varchar(25)")
+    @Column(name = "state", columnDefinition = "nvarchar(25)")
     private String state;
 
-    @Column(name = "zip_code", columnDefinition = "varchar(5)")
+    @Column(name = "zip_code", columnDefinition = "nvarchar(5)")
     private String zip_code;
 
     @Column(updatable = false)
