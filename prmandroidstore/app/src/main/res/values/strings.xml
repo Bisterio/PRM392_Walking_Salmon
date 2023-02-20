@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">prm-android-store</string>
+    <string name="app_name">Walking Salmon</string>
+    <string name="toolbar_home">Home</string>
+    <string name="product_id_placeholder">Product ID</string>
+    <string name="product_name_placeholder">Product Name</string>
+    <string name="product_brand_placeholder">Product Brand</string>
+    <string name="product_price_placeholder">Product Price</string>
+    <string name="product_image_placeholder">Product Image</string>
+    <string name="product_model_year_placeholder">Product Model Year</string>
+    <string name="categories">All categories</string>
+    <string name="view_all">View all ></string>
+    <string name="category_id_placeholder">Category ID</string>
+    <string name="category_name_placeholder">Category Name</string>
+    <string name="category_image_placeholder">Category Image</string>
 </resources>
