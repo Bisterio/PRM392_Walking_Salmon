@@ -1,6 +1,7 @@
 package com.example.prm_android_store.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prm_android_store.R;
+import com.example.prm_android_store.activities.HomeActivity;
+import com.example.prm_android_store.activities.ProductDetailActivity;
 import com.example.prm_android_store.data.Product;
 import com.squareup.picasso.Picasso;
 
@@ -34,7 +37,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflating and returning our view holder
         LayoutInflater inflater = LayoutInflater.from(mCtx);
-        View view = inflater.inflate(R.layout.item_product, parent, false);
+        View view = inflater.inflate(R.layout.item_product_recycler_view, parent, false);
         return new ProductViewHolder(view);
     }
 
@@ -60,7 +63,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     }
 
 
-    class ProductViewHolder extends RecyclerView.ViewHolder {
+    class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView textViewProductID, textViewProductName, textViewProductBrand, textViewModelYear, textViewPrice;
         ImageView imageView;
@@ -74,6 +77,23 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             textViewModelYear = itemView.findViewById(R.id.tvProductModelYear);
             textViewPrice = itemView.findViewById(R.id.tvProductPrice);
             imageView = itemView.findViewById(R.id.ivProduct);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            Intent detail = new Intent(mCtx, ProductDetailActivity.class);
+            detail.putExtra("productId", productList.get(position).getId());
+            detail.putExtra("productName", productList.get(position).getName());
+            detail.putExtra("productImage", productList.get(position).getImage());
+            detail.putExtra("productPrice", productList.get(position).getList_price());
+            detail.putExtra("productBrand", productList.get(position).getBrand().getName());
+            detail.putExtra("productCategory", productList.get(position).getCategory().getName());
+            detail.putExtra("productModelYear", productList.get(position).getModel_year());
+            detail.putExtra("productDescription", productList.get(position).getDescription());
+            mCtx.startActivity(detail);
         }
     }
 }

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prm_android_store.R;
 import com.example.prm_android_store.data.Category;
-import com.example.prm_android_store.data.Product;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -35,7 +34,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflating and returning our view holder
         LayoutInflater inflater = LayoutInflater.from(mCtx);
-        View view = inflater.inflate(R.layout.item_category, parent, false);
+        View view = inflater.inflate(R.layout.item_category_recycler_view, parent, false);
         return new CategoryViewHolder(view);
     }
 
