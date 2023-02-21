@@ -1,6 +1,7 @@
 package com.example.prm_android_store.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,9 +9,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.prm_android_store.R;
 import com.example.prm_android_store.adapters.CategoryListAdapter;
@@ -28,6 +32,7 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView categoryListRecyclerView;
     private NestedScrollView nestedScrollView;
     private ProgressBar loadingPB;
+    private SearchView searchView;
 
     // Init list
     private ArrayList<Product> productList = new ArrayList<>();
@@ -43,6 +48,22 @@ public class HomeActivity extends AppCompatActivity {
         categoryListRecyclerView = findViewById(R.id.rvCategoryList);
         nestedScrollView = findViewById(R.id.nsv);
         loadingPB = findViewById(R.id.pbLoading);
+        searchView = findViewById(R.id.searchView);
+
+        // Search view handle
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(HomeActivity.this, "Submit", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         // Init list
         initCategoryList();
