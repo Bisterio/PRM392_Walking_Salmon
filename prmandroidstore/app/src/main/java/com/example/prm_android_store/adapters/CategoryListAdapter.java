@@ -1,6 +1,7 @@
 package com.example.prm_android_store.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prm_android_store.R;
+import com.example.prm_android_store.activities.ProductDetailActivity;
+import com.example.prm_android_store.activities.ProductsActivity;
 import com.example.prm_android_store.data.Category;
 import com.squareup.picasso.Picasso;
 
@@ -57,7 +60,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     }
 
 
-    class CategoryViewHolder extends RecyclerView.ViewHolder {
+    class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView textViewCategoryID, textViewCategoryName;
         ImageView imageView;
@@ -68,6 +71,17 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             textViewCategoryID = itemView.findViewById(R.id.tvCategoryId);
             textViewCategoryName = itemView.findViewById(R.id.tvCategoryName);
             imageView = itemView.findViewById(R.id.ivCategory);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            Intent categorized_products = new Intent(mCtx, ProductsActivity.class);
+            categorized_products.putExtra("categoryId", categoryList.get(position).getId());
+            categorized_products.putExtra("categoryName", categoryList.get(position).getName());
+            mCtx.startActivity(categorized_products);
         }
     }
 }

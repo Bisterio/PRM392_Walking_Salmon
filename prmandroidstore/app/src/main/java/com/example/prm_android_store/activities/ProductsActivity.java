@@ -2,67 +2,90 @@ package com.example.prm_android_store.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.prm_android_store.R;
-import com.example.prm_android_store.adapters.CategoryListAdapter;
 import com.example.prm_android_store.adapters.ProductListAdapter;
 import com.example.prm_android_store.data.Brand;
 import com.example.prm_android_store.data.Category;
 import com.example.prm_android_store.data.Product;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity {
+public class ProductsActivity extends AppCompatActivity {
 
     // Init view
     private RecyclerView productListRecyclerView;
-    private RecyclerView categoryListRecyclerView;
+    private ImageView backArrow;
     private SearchView searchView;
-    private TextView viewAll;
+    private TextView productNumber;
+    private ChipGroup filterChipGroup;
     private ImageView cartIcon;
 
     // Init list
     private ArrayList<Product> productList = new ArrayList<>();
-    private ArrayList<Category> categoryList = new ArrayList<>();
+    private ArrayList<String> categoryFilter = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_products);
+
+        // Get data from intent
+        Intent intent = getIntent();
 
         // Set up view and listener
         setupUI();
         setupListener();
 
+        // Handle intent
+        handleIntent(intent);
+        setFilterChipGroup();
+
         // Init list
-        initCategoryList();
         initProductList();
 
+        // Set product number
+        productNumber.setText(String.valueOf(productList.size()) + " products");
+
         // Build recycler view
-        buildCategoryRecyclerView();
         buildProductRecyclerView();
+    }
+
+    private void handleIntent(Intent intent){
+        if(intent.getStringExtra("search") != null){
+            searchView.setQuery(intent.getStringExtra("search"), false);
+        }
+
+        if(intent.getStringExtra("categoryName") != null){
+            categoryFilter.add(intent.getStringExtra("categoryName"));
+        }
+    }
+
+    private void setFilterChipGroup(){
+        for (String chipText: categoryFilter){
+            Chip lChip = new Chip(this);
+            lChip.setText(chipText);
+            filterChipGroup.addView(lChip);
+        }
     }
 
     private void setupUI(){
         // Find View
         productListRecyclerView = findViewById(R.id.rvProductList);
-        categoryListRecyclerView = findViewById(R.id.rvCategoryList);
+        backArrow = findViewById(R.id.ivBackArrow);
         searchView = findViewById(R.id.searchView);
-        viewAll = findViewById(R.id.tvViewAll);
+        productNumber = findViewById(R.id.tvProductsNumber);
+        filterChipGroup = findViewById(R.id.cgFilter);
         cartIcon = findViewById(R.id.ivCartIcon);
     }
 
@@ -72,7 +95,7 @@ public class HomeActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Intent intent = new Intent(HomeActivity.this, ProductsActivity.class);
+                Intent intent = new Intent(ProductsActivity.this, ProductsActivity.class);
                 intent.putExtra("search", query);
                 startActivity(intent);
                 return true;
@@ -84,12 +107,11 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        // View all button navigate to all products activity
-        viewAll.setOnClickListener(new View.OnClickListener() {
+        // Back button
+        backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, ProductsActivity.class);
-                startActivity(intent);
+            public void onClick(View view) {
+                finish();
             }
         });
 
@@ -97,7 +119,7 @@ public class HomeActivity extends AppCompatActivity {
         cartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, CartActivity.class);
+                Intent intent = new Intent(ProductsActivity.this, CartActivity.class);
                 startActivity(intent);
             }
         });
@@ -105,31 +127,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private void buildProductRecyclerView() {
         // Init recycler view adapter and layout manager
-        ProductListAdapter productListAdapter = new ProductListAdapter(HomeActivity.this, productList, String.valueOf(searchView.getQuery()));
+        ProductListAdapter productListAdapter = new ProductListAdapter(ProductsActivity.this, productList, String.valueOf(searchView.getQuery()));
         GridLayoutManager productLayoutManager = new GridLayoutManager(this, 2);
         productListRecyclerView.setHasFixedSize(true);
         productListRecyclerView.setLayoutManager(productLayoutManager);
         productListRecyclerView.setAdapter(productListAdapter);
-    }
-
-    private void buildCategoryRecyclerView() {
-        CategoryListAdapter categoryListAdapter = new CategoryListAdapter(HomeActivity.this, categoryList);
-        GridLayoutManager categoryLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.HORIZONTAL, false);
-        categoryListRecyclerView.setHasFixedSize(true);
-        categoryListRecyclerView.setLayoutManager(categoryLayoutManager);
-        categoryListRecyclerView.setAdapter(categoryListAdapter);
-    }
-
-    private void initCategoryList(){
-        categoryList.add(new Category(1, "TV", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//content/Tivi-128x129.png"));
-        categoryList.add(new Category(2, "Refrigerator", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//content/Tulanh-128x129.png"));
-        categoryList.add(new Category(3, "Air Conditioner", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//content/Maylanh-128x129-128x129-1.png"));
-        categoryList.add(new Category(4, "Washing Machine", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//content/Maygiat-128x129.png"));
-        categoryList.add(new Category(5, "Dryer", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//content/maysayquanao-128x129-1.png"));
-        categoryList.add(new Category(6, "Fan", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//content/quat-128x129.png"));
-        categoryList.add(new Category(7, "Laptop", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//content/Laptop-129x129-1.png"));
-        categoryList.add(new Category(8, "Phone", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//content/6781763F-DDB5-4E3E-B676-5350244DAE9D-64x64.png"));
-        categoryList.add(new Category(9, "Household", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//content/Diengiadung-128x129.png"));
     }
 
     private void initProductList(){

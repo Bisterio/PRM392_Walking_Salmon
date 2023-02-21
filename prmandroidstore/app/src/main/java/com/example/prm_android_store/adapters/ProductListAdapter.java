@@ -27,10 +27,13 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     //we are storing all the products in a list
     private List<Product> productList;
 
+    private String searchQuery;
+
     //getting the context and product list with constructor
-    public ProductListAdapter(Context mCtx, List<Product> productList) {
+    public ProductListAdapter(Context mCtx, List<Product> productList, String searchQuery) {
         this.mCtx = mCtx;
         this.productList = productList;
+        this.searchQuery = searchQuery;
     }
 
     @Override
@@ -85,6 +88,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         public void onClick(View v) {
             int position = getAdapterPosition();
             Intent detail = new Intent(mCtx, ProductDetailActivity.class);
+            detail.putExtra("search", searchQuery);
             detail.putExtra("productId", productList.get(position).getId());
             detail.putExtra("productName", productList.get(position).getName());
             detail.putExtra("productImage", productList.get(position).getImage());
