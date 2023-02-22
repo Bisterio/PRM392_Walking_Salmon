@@ -9,9 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.prm_android_store.R;
 import com.example.prm_android_store.adapters.CartListAdapter;
@@ -20,6 +23,8 @@ import com.example.prm_android_store.data.Brand;
 import com.example.prm_android_store.data.CartItem;
 import com.example.prm_android_store.data.Category;
 import com.example.prm_android_store.data.Product;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 
@@ -30,6 +35,16 @@ public class CartActivity extends AppCompatActivity {
     private RecyclerView cartListRecyclerView;
     private TextView totalQuantity;
     private TextView totalPrice;
+    private TextView orderButton;
+    private TextView totalPriceBottom;
+    private TextInputLayout customerFirstNameInput;
+    private TextInputLayout customerLastNameInput;
+    private TextInputLayout customerEmailInput;
+    private TextInputLayout customerPhoneInput;
+    private TextInputLayout customerStateInput;
+    private TextInputLayout customerCityInput;
+    private TextInputLayout customerStreetInput;
+    private TextInputLayout customerZipCodeInput;
 
     // Init list
     private ArrayList<CartItem> cartList = new ArrayList<>();
@@ -49,6 +64,8 @@ public class CartActivity extends AppCompatActivity {
         // Handle cart information
         totalQuantity.setText("Total prices (" + calculatedCartQuantity() + " products):");
         totalPrice.setText(String.format("%,.0f", calculatedCartPrice()) + "₫");
+        totalPriceBottom.setText(String.format("%,.0f", calculatedCartPrice()) + "₫");
+        orderButton.setText("ORDER (" + calculatedCartQuantity() + ")");
 
         // Build recycler view
         buildCartRecyclerView();
@@ -81,6 +98,16 @@ public class CartActivity extends AppCompatActivity {
         cartListRecyclerView = findViewById(R.id.rvCartList);
         totalQuantity = findViewById(R.id.tvCartsTotalQuantity);
         totalPrice = findViewById(R.id.tvCartsTotalPrice);
+        totalPriceBottom = findViewById(R.id.tvTotalPrice);
+        orderButton = findViewById(R.id.tvOrderButton);
+        customerFirstNameInput = findViewById(R.id.tilFirstName);
+        customerLastNameInput = findViewById(R.id.tilLastName);
+        customerEmailInput = findViewById(R.id.tilEmail);
+        customerPhoneInput = findViewById(R.id.tilPhone);
+        customerStateInput = findViewById(R.id.tilState);
+        customerCityInput = findViewById(R.id.tilCity);
+        customerStreetInput = findViewById(R.id.tilStreet);
+        customerZipCodeInput = findViewById(R.id.tilZipCode);
     }
 
     private void setupListener(){
@@ -91,6 +118,29 @@ public class CartActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        // Order Button
+        orderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (validateFirstName() && validateLastName() && validateEmail() && validatePhone()
+                && validateState() && validateCity() && validateStreet() && validateZipCode()){
+                    Toast.makeText(CartActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(CartActivity.this, "Not validated", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // Add validation to input field
+        customerFirstNameInput.getEditText().addTextChangedListener(new ValidationTextWatcher(customerFirstNameInput));
+        customerLastNameInput.getEditText().addTextChangedListener(new ValidationTextWatcher(customerLastNameInput));
+        customerEmailInput.getEditText().addTextChangedListener(new ValidationTextWatcher(customerEmailInput));
+        customerPhoneInput.getEditText().addTextChangedListener(new ValidationTextWatcher(customerPhoneInput));
+        customerStateInput.getEditText().addTextChangedListener(new ValidationTextWatcher(customerStateInput));
+        customerCityInput.getEditText().addTextChangedListener(new ValidationTextWatcher(customerCityInput));
+        customerStreetInput.getEditText().addTextChangedListener(new ValidationTextWatcher(customerStreetInput));
+        customerZipCodeInput.getEditText().addTextChangedListener(new ValidationTextWatcher(customerZipCodeInput));
     }
 
     private void buildCartRecyclerView() {
@@ -103,5 +153,155 @@ public class CartActivity extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(cartListRecyclerView.getContext(),
                 linearLayoutManager.getOrientation());
         cartListRecyclerView.addItemDecoration(dividerItemDecoration);
+    }
+
+    private class ValidationTextWatcher implements TextWatcher {
+        private View view;
+        private ValidationTextWatcher(View view) {
+            this.view = view;
+        }
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+        public void afterTextChanged(Editable editable) {
+            switch (view.getId()) {
+                case R.id.tilFirstName:
+                    validateFirstName();
+                    break;
+                case R.id.tilLastName:
+                    validateLastName();
+                    break;
+                case R.id.tilEmail:
+                    validateEmail();
+                    break;
+                case R.id.tilPhone:
+                    validatePhone();
+                    break;
+                case R.id.tilState:
+                    validateState();
+                    break;
+                case R.id.tilCity:
+                    validateCity();
+                    break;
+                case R.id.tilStreet:
+                    validateStreet();
+                    break;
+                case R.id.tilZipCode:
+                    validateZipCode();
+                    break;
+            }
+        }
+    }
+
+    private boolean validateFirstName(){
+        // First name validation
+        String firstName = customerFirstNameInput.getEditText().getText().toString().trim();
+        if (firstName.isEmpty()) {
+            customerFirstNameInput.setError("Please enter first name");
+            return false;
+        } else {
+            customerFirstNameInput.setError(null);
+        }
+        return true;
+    }
+
+    private boolean validateLastName(){
+        // Last name validation
+        String lastName = customerLastNameInput.getEditText().getText().toString().trim();
+        if (lastName.isEmpty()) {
+            customerLastNameInput.setError("Please enter last name");
+            return false;
+        } else {
+            customerLastNameInput.setError(null);
+        }
+        return true;
+    }
+
+    private boolean validateEmail(){
+        // Email validation
+        String email = customerEmailInput.getEditText().getText().toString().trim();
+        if (email.isEmpty()) {
+            customerEmailInput.setError("Please enter email");
+            return false;
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            customerEmailInput.setError("Invalid email format, ex: abc@example.com");
+            return false;
+        } else {
+            customerEmailInput.setError(null);
+        }
+        return true;
+    }
+
+    private boolean validatePhone(){
+        // Phone validation
+        String phone = customerPhoneInput.getEditText().getText().toString().trim();
+        if (phone.isEmpty()) {
+            customerPhoneInput.setError("Please enter phone number");
+            return false;
+        } else if (phone.length() != 10){
+            customerPhoneInput.setError("Phone number must be 10 digits");
+            return false;
+        }
+        else {
+            customerPhoneInput.setError(null);
+        }
+
+        return true;
+    }
+
+    private boolean validateState(){
+        // State validation
+        String state = customerStateInput.getEditText().getText().toString().trim();
+        if (state.isEmpty()) {
+            customerStateInput.setError("Please enter state");
+            return false;
+        } else {
+            customerStateInput.setError(null);
+        }
+        return true;
+    }
+
+    private boolean validateCity(){
+        // City validation
+        String city = customerCityInput.getEditText().getText().toString().trim();
+        if (city.isEmpty()) {
+            customerCityInput.setError("Please enter city");
+            return false;
+        } else {
+            customerCityInput.setError(null);
+        }
+
+        return true;
+    }
+
+    private boolean validateStreet(){
+        // Street validation
+        String street = customerStreetInput.getEditText().getText().toString().trim();
+        if (street.isEmpty()) {
+            customerStreetInput.setError("Please enter street");
+            return false;
+        } else {
+            customerStreetInput.setError(null);
+        }
+
+        return true;
+    }
+
+    private boolean validateZipCode(){
+        // Zip code validation
+        String zipCode = customerZipCodeInput.getEditText().getText().toString().trim();
+        if (zipCode.isEmpty()) {
+            customerZipCodeInput.setError("Please enter zip code");
+            return false;
+        } else if (zipCode.length() != 5){
+            customerZipCodeInput.setError("Zip code must be 5 digits");
+            return false;
+        }
+        else {
+            customerZipCodeInput.setError(null);
+        }
+
+        return true;
     }
 }

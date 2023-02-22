@@ -56,9 +56,10 @@
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/searchView"
                 android:background="@color/white"
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="35dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivBackArrow"
                 app:layout_constraintEnd_toStartOf="@+id/ivCartIcon"
                 app:layout_constraintTop_toTopOf="parent"
                 android:paddingHorizontal="-14dp"
