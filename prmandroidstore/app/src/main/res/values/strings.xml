@@ -16,4 +16,6 @@
     <string name="category_id_placeholder">Category ID</string>
     <string name="category_name_placeholder">Category Name</string>
     <string name="category_image_placeholder">Category Image</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

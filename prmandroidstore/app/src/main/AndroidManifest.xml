@@ -16,6 +16,20 @@
         android:theme="@style/Theme.Prmandroidstore"
         tools:targetApi="31">
         <activity
+            android:name=".activities.OrderDetailActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activities.OrderHistoryActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activities.CartActivity"
             android:exported="false">
             <meta-data

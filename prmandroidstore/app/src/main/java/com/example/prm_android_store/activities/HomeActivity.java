@@ -1,14 +1,18 @@
 package com.example.prm_android_store.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.view.GravityCompat;
 import androidx.core.widget.NestedScrollView;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,10 +27,12 @@ import com.example.prm_android_store.adapters.ProductListAdapter;
 import com.example.prm_android_store.data.Brand;
 import com.example.prm_android_store.data.Category;
 import com.example.prm_android_store.data.Product;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener{
 
     // Init view
     private RecyclerView productListRecyclerView;
@@ -34,6 +40,9 @@ public class HomeActivity extends AppCompatActivity {
     private SearchView searchView;
     private TextView viewAll;
     private ImageView cartIcon;
+    private NavigationView navView;
+    private DrawerLayout drawerLayout;
+    private ImageView menuButton;
 
     // Init list
     private ArrayList<Product> productList = new ArrayList<>();
@@ -64,6 +73,12 @@ public class HomeActivity extends AppCompatActivity {
         searchView = findViewById(R.id.searchView);
         viewAll = findViewById(R.id.tvViewAll);
         cartIcon = findViewById(R.id.ivCartIcon);
+        navView = findViewById(R.id.nav_view);
+        if (navView != null) {
+            navView.setNavigationItemSelectedListener(this);
+        }
+        menuButton = findViewById(R.id.ivMenu);
+        drawerLayout = findViewById(R.id.drawer_layout);
     }
 
     private void setupListener(){
@@ -101,6 +116,24 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Open navigation drawer
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else{
+            super.onBackPressed();
+        }
     }
 
     private void buildProductRecyclerView() {
@@ -140,5 +173,28 @@ public class HomeActivity extends AppCompatActivity {
         productList.add(new Product(5, "Daikin Inverter 1 HP FTKB25WMVMV", "Daikin Inverter 1 HP FTKB25WVMMV air conditioner is a line of air conditioners with Inverter technology to help save energy. In particular, the outdoor unit and indoor unit are improved to help the machine operate smoothly, stably, and achieve optimal capacity. In addition, owns Enzyme Blue filter combined with PM2.5 fine dust filter to remove odor-causing agents, allergens, and mold.", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/2002/271496/daikin-inverter-1-hp-ftkb25wmvmv31-550x160.jpg", 2018, 10990000, new Brand(5, "Daikin"), new Category(3, "Air Conditioner", ""), "created_at", "updated_at"));
         productList.add(new Product(6, "Smart TV Samsung 4K Crystal UHD 50 inch UA50AU8100", "Smart TV Samsung 4K 50 inch UA50AU8100 owns AirSlim design, slim frame, ultra-thin border feels like 3-sided borderless, super thin border for overall delicate TV, wide screen, adding aesthetics for living space. The stand is flexible, easy to change the height to fit many different interior designs and TV shelves.", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/1942/235791/led-4k-samsung-ua50au8100-221122-040529-550x340.jpg", 2021, 9890000, new Brand(3, "Samsung"), new Category(1, "TV", ""), "created_at", "updated_at"));
         productList.add(new Product(7, "LG Inverter 266 Lít GV-B262WB", "LG Inverter refrigerator 266 liters GV-B262WB has the ability to save electricity effectively and operate smoothly. Moreover, this refrigerator model can maintain optimal food freshness and cool drinks when placed on the side of the refrigerator door thanks to special technologies.", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/1943/284312/tu-lanh-lg-inverter-266-lit-gv-b262wb50-600x600.jpg", 2020, 6690000, new Brand(6, "LG"), new Category(2, "Refrigerator", ""), "created_at", "updated_at"));
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        Intent intent;
+
+        if (id == R.id.nav_cart) {
+            intent = new Intent(HomeActivity.this, CartActivity.class);
+            startActivity(intent);
+        }
+
+        if (id == R.id.nav_products) {
+            intent = new Intent(HomeActivity.this, ProductsActivity.class);
+            startActivity(intent);
+        }
+
+        if (id == R.id.nav_history) {
+            intent = new Intent(HomeActivity.this, OrderHistoryActivity.class);
+            startActivity(intent);
+        }
+
+        return false;
     }
 }

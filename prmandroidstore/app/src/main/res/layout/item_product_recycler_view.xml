@@ -1,77 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:layout_width="match_parent"
-android:layout_height="300dp"
-android:layout_gravity="center"
-android:layout_margin="2.5dp"
-app:cardCornerRadius="2dp">
-
-<LinearLayout
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="300dp"
+    android:layout_gravity="center"
+    android:layout_margin="2.5dp"
+    app:cardCornerRadius="2dp">
 
-    <ImageView
-        android:contentDescription="@string/product_image_placeholder"
-        android:scaleType="fitCenter"
-        android:id="@+id/ivProduct"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"/>
-    <TextView
-        android:id="@+id/tvProductName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/product_name_placeholder"
-        android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:textSize="16sp"
-        android:scrollHorizontally="true"
-        android:ellipsize="end"
-        android:maxLines="2"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvProductBrand"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/product_brand_placeholder"
-        android:textAlignment="viewStart"
-        android:layout_marginStart="5dp"/>
+        <ImageView
+            android:contentDescription="@string/product_image_placeholder"
+            android:scaleType="fitCenter"
+            android:id="@+id/ivProduct"
+            android:layout_width="match_parent"
+            android:layout_height="180dp" />
 
-    <TextView
-        android:id="@+id/tvProductPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/product_price_placeholder"
-        android:textAlignment="viewStart"
-        android:layout_marginStart="5dp"
-        android:textSize="16sp"
-        android:textColor="#ba2525"
-        android:textStyle="bold"
-        android:layout_marginTop="5dp"/>
+        <TextView
+            android:id="@+id/tvProductName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/product_name_placeholder"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:textSize="16sp"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:maxLines="2" />
 
-    <TextView
-        android:id="@+id/tvProductModelYear"
-        android:visibility="invisible"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/product_model_year_placeholder"
-        android:textAlignment="viewStart"
-        android:layout_margin="5dp"/>
+        <TextView
+            android:id="@+id/tvProductBrand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/product_brand_placeholder"
+            android:textAlignment="viewStart"
+            android:layout_marginStart="5dp" />
 
-    <TextView
-        android:id="@+id/tvProductId"
-        android:visibility="invisible"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/product_id_placeholder"
-        android:textAlignment="viewStart" />
+        <TextView
+            android:id="@+id/tvProductPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/product_price_placeholder"
+            android:textAlignment="viewStart"
+            android:layout_marginStart="5dp"
+            android:textSize="16sp"
+            android:textColor="#ba2525"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp" />
+
+        <TextView
+            android:id="@+id/tvProductModelYear"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/product_model_year_placeholder"
+            android:textAlignment="viewStart"
+            android:layout_margin="5dp" />
+
+        <TextView
+            android:id="@+id/tvProductId"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/product_id_placeholder"
+            android:textAlignment="viewStart" />
 
 
-
-</LinearLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

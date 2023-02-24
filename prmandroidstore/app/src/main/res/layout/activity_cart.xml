@@ -18,7 +18,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/black"
+                android:background="@color/lapis"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="?attr/actionBarTheme"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +28,7 @@
                 app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:titleMarginStart="45dp"
                 app:titleTextColor="#ffff"
-                app:title="Cart"/>
+                app:title="Your Cart"/>
 
             <!-- ImageView beside title of ToolBar -->
             <ImageView
@@ -99,10 +99,10 @@
             </LinearLayout>
 
             <TextView
-                android:background="@color/black"
+                android:background="@color/lapis"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:padding="10dp"
+                android:padding="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="CUSTOMER INFORMATION"
@@ -202,7 +202,7 @@
             <TextView
                 android:background="@color/white"
                 android:textColor="@color/black"
-                android:padding="10dp"
+                android:padding="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="ADDRESS"
@@ -323,7 +323,7 @@
 
                 <TextView
                     android:id="@+id/tvOrderButton"
-                    android:background="@color/black"
+                    android:background="@color/light_blue"
                     android:textColor="@color/white"
                     android:elevation="10dp"
                     android:textSize="18sp"
