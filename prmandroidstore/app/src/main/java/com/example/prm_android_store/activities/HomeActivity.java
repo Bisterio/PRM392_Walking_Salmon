@@ -43,6 +43,7 @@ public class HomeActivity extends AppCompatActivity implements
     private NavigationView navView;
     private DrawerLayout drawerLayout;
     private ImageView menuButton;
+    private TextView staffLoginButton;
 
     // Init list
     private ArrayList<Product> productList = new ArrayList<>();
@@ -79,6 +80,7 @@ public class HomeActivity extends AppCompatActivity implements
         }
         menuButton = findViewById(R.id.ivMenu);
         drawerLayout = findViewById(R.id.drawer_layout);
+        staffLoginButton = findViewById(R.id.nav_footer_staff);
     }
 
     private void setupListener(){
@@ -122,6 +124,15 @@ public class HomeActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+        // Staff login activity
+        staffLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, StaffLoginActivity.class);
+                startActivity(intent);
             }
         });
     }
