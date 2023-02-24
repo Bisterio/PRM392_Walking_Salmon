@@ -209,6 +209,5 @@ android:layout_height="match_parent"
         android:gravity="center"
         android:text="Add to Cart"
         android:textStyle="bold"
-        android:drawablePadding="10dp"
         android:layout_gravity="bottom"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

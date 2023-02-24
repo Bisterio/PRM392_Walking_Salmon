@@ -6,10 +6,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,8 +50,8 @@ public class OrderHistoryActivity extends AppCompatActivity {
     private RecyclerView orderListRecyclerView;
 
     // Init data
-    private Customer loginedCustomer = new Customer(1, "Minh Duc", "Le", "leduchien09@gmail.com", "0931856541", "Ho Chi Minh city", "Viet Nam", "Phuoc Long B ward", 70000);
-    private ArrayList<Order> orderList = new ArrayList<>();
+    private final Customer loginedCustomer = new Customer(1, "Minh Duc", "Le", "leduchien09@gmail.com", "0931856541", "Ho Chi Minh city", "Viet Nam", "Phuoc Long B ward", 70000);
+    private final ArrayList<Order> orderList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +78,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
         orderList.add(new Order(1, 4, 3, 12380000, "05/03/2022", "05/05/2022", "05/04/2022", loginedCustomer));
     }
 
-    private void setupUI(){
+    private void setupUI() {
         // Find View
         backArrow = findViewById(R.id.ivBackArrow);
         continueButton = findViewById(R.id.tvContinueButton);
@@ -99,7 +102,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
         orderHistoryLayout.setVisibility(LinearLayout.GONE);
     }
 
-    private void setupListener(){
+    private void setupListener() {
         // Back button
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,11 +116,16 @@ public class OrderHistoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Switch to OTP input layout
-                if(validatePhone()){
+                if (validatePhone()) {
                     String phone = phoneInput.getEditText().getText().toString().trim();
                     phoneVerificationTitle.setText("Verification code has been sent to phone number " + phone);
                     phoneInputLayout.setVisibility(LinearLayout.GONE);
                     OTPInputLayout.setVisibility(LinearLayout.VISIBLE);
+                    // Hide keyboard
+                    if (view != null) {
+                        InputMethodManager manager= (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
                 }
             }
         });
@@ -127,9 +135,14 @@ public class OrderHistoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Switch to order history layout
-                if(validateOTP() && OTPInput.getEditText().getText().toString().trim().equals("123456")){
+                if (validateOTP() && OTPInput.getEditText().getText().toString().trim().equals("123456")) {
                     OTPInputLayout.setVisibility(LinearLayout.GONE);
                     orderHistoryLayout.setVisibility(LinearLayout.VISIBLE);
+                    // Hide keyboard
+                    if (view != null) {
+                        InputMethodManager manager= (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
 
                     // Get logined user info
                     customerName.setText(loginedCustomer.getLast_name() + " " + loginedCustomer.getFirst_name());
@@ -139,7 +152,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
                     // Get orders info
                     initOrderList();
                     buildOrderListRecyclerView();
-                } else if (!OTPInput.getEditText().getText().toString().trim().equals("123456")){
+                } else if (!OTPInput.getEditText().getText().toString().trim().equals("123456")) {
                     OTPInput.setError("Wrong verification code");
                 }
             }
@@ -165,10 +178,12 @@ public class OrderHistoryActivity extends AppCompatActivity {
         // Add Phone validation
         phoneInput.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -179,10 +194,12 @@ public class OrderHistoryActivity extends AppCompatActivity {
         // Add OTP validation
         OTPInput.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -191,34 +208,32 @@ public class OrderHistoryActivity extends AppCompatActivity {
         });
     }
 
-    private boolean validatePhone(){
+    private boolean validatePhone() {
         // Phone validation
         String phone = phoneInput.getEditText().getText().toString().trim();
         if (phone.isEmpty()) {
             phoneInput.setError("Please enter phone number");
             return false;
-        } else if (phone.length() != 10){
+        } else if (phone.length() != 10) {
             phoneInput.setError("Phone number must be 10 digits");
             return false;
-        }
-        else {
+        } else {
             phoneInput.setError(null);
         }
 
         return true;
     }
 
-    private boolean validateOTP(){
+    private boolean validateOTP() {
         // Phone validation
         String otp = OTPInput.getEditText().getText().toString().trim();
         if (otp.isEmpty()) {
             OTPInput.setError("Please enter verification code");
             return false;
-        } else if (otp.length() != 6){
+        } else if (otp.length() != 6) {
             OTPInput.setError("Verification code must be 6 digits");
             return false;
-        }
-        else {
+        } else {
             OTPInput.setError(null);
         }
 
