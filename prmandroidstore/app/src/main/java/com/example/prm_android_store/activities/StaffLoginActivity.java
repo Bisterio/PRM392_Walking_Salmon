@@ -101,9 +101,6 @@ public class StaffLoginActivity extends AppCompatActivity {
                         InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
-//                    Intent intent = new Intent (StaffLoginActivity.this, HomeActivity.class);
-//                    intent.putExtra("logined", true);
-//                    setResult(RESULT_OK, intent);
 
                     SharedPreferences sharedPref = getSharedPreferences("application", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();

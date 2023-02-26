@@ -92,7 +92,7 @@ public class CustomerSearchActivity extends AppCompatActivity {
                     customerEmail.setText(searchedCustomer.getEmail());
                     customerPhone.setText(searchedCustomer.getPhone());
                     customerAddress.setText(searchedCustomer.getStreet() + ", " + searchedCustomer.getCity() + ", " + searchedCustomer.getState());
-                } else {
+                } else if (validatePhone()) {
                     notFoundLayout.setVisibility(LinearLayout.VISIBLE);
                     customerInformationLayout.setVisibility(LinearLayout.GONE);
                 }
@@ -121,6 +121,14 @@ public class CustomerSearchActivity extends AppCompatActivity {
             public void onClick(View view) {
                 finish();
                 Intent intent = new Intent(CustomerSearchActivity.this, CartActivity.class);
+                intent.putExtra("firstName", searchedCustomer.getFirst_name());
+                intent.putExtra("lastName", searchedCustomer.getLast_name());
+                intent.putExtra("email", searchedCustomer.getEmail());
+                intent.putExtra("phone", searchedCustomer.getPhone());
+                intent.putExtra("state", searchedCustomer.getState());
+                intent.putExtra("city", searchedCustomer.getCity());
+                intent.putExtra("street", searchedCustomer.getStreet());
+                intent.putExtra("zipCode", searchedCustomer.getZip_code());
                 startActivity(intent);
             }
         });
@@ -131,6 +139,7 @@ public class CustomerSearchActivity extends AppCompatActivity {
             public void onClick(View view) {
                 finish();
                 Intent intent = new Intent(CustomerSearchActivity.this, CartActivity.class);
+                intent.putExtra("phone", searchedCustomer.getPhone());
                 startActivity(intent);
             }
         });

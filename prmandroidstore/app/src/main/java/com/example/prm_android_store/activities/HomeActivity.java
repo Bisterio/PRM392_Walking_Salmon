@@ -162,6 +162,7 @@ public class HomeActivity extends AppCompatActivity implements
                     editor.apply();
                     finish();
                     startActivity(getIntent());
+                    Toast.makeText(HomeActivity.this, "Logout successfully", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -7,10 +7,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,6 +48,7 @@ public class CartActivity extends AppCompatActivity {
     private TextInputLayout customerCityInput;
     private TextInputLayout customerStreetInput;
     private TextInputLayout customerZipCodeInput;
+    private TextView searchCustomerButton;
 
     // Init list
     private ArrayList<CartItem> cartList = new ArrayList<>();
@@ -58,6 +62,12 @@ public class CartActivity extends AppCompatActivity {
         setupUI();
         setupListener();
 
+        // Check if staff
+        SharedPreferences sharedPref = getSharedPreferences("application", Context.MODE_PRIVATE);
+        if (sharedPref.getString("CURRENT_ACCOUNT", "").trim().isEmpty()) {
+            searchCustomerButton.setVisibility(View.GONE);
+        }
+
         // Set up cart list
         initCartList();
 
@@ -66,6 +76,12 @@ public class CartActivity extends AppCompatActivity {
         totalPrice.setText(String.format("%,.0f", calculatedCartPrice()) + "₫");
         totalPriceBottom.setText(String.format("%,.0f", calculatedCartPrice()) + "₫");
         orderButton.setText("ORDER (" + calculatedCartQuantity() + ")");
+
+        // Get data from intent
+        Intent intent = getIntent();
+        if(intent.getStringExtra("phone") != null){
+            getUserData(intent);
+        }
 
         // Build recycler view
         buildCartRecyclerView();
@@ -108,6 +124,7 @@ public class CartActivity extends AppCompatActivity {
         customerCityInput = findViewById(R.id.tilCity);
         customerStreetInput = findViewById(R.id.tilStreet);
         customerZipCodeInput = findViewById(R.id.tilZipCode);
+        searchCustomerButton = findViewById(R.id.tvSearchCustomerCart);
     }
 
     private void setupListener(){
@@ -116,6 +133,16 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        // Search customer activity
+        searchCustomerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CartActivity.this, CustomerSearchActivity.class);
+                finish();
+                startActivity(intent);
             }
         });
 
@@ -303,5 +330,21 @@ public class CartActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private void getUserData(Intent intent){
+        if(intent.getStringExtra("email") != null){
+            customerFirstNameInput.getEditText().setText(intent.getStringExtra("firstName"));
+            customerLastNameInput.getEditText().setText(intent.getStringExtra("lastName"));
+            customerEmailInput.getEditText().setText(intent.getStringExtra("email"));
+            customerPhoneInput.getEditText().setText(intent.getStringExtra("phone"));
+            customerStateInput.getEditText().setText(intent.getStringExtra("state"));
+            customerCityInput.getEditText().setText(intent.getStringExtra("city"));
+            customerStreetInput.getEditText().setText(intent.getStringExtra("street"));
+            customerZipCodeInput.getEditText().setText(String.valueOf(intent.getIntExtra("zipCode", 0)));
+        }
+        else {
+            customerPhoneInput.getEditText().setText(intent.getStringExtra("phone"));
+        }
     }
 }
