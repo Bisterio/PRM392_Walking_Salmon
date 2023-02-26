@@ -47,7 +47,7 @@ public class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdap
         // Binding the data with the viewholder views
         holder.textViewProductName.setText(orderItem.getProduct().getName());
         holder.textViewProductBrand.setText(orderItem.getProduct().getBrand().getName());
-        holder.textViewQuantity.setText(String.valueOf(orderItem.getQuantity()));
+        holder.textViewQuantity.setText("Quantity: " + String.valueOf(orderItem.getQuantity()));
         holder.textViewPrice.setText(String.format("%,.0f", orderItem.getProduct().getList_price()) + "₫");
 
         Picasso.get().load(orderItem.getProduct().getImage()).into(holder.imageView);

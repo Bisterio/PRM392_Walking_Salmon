@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -80,26 +82,35 @@ public class StaffLoginActivity extends AppCompatActivity {
                     OTPInputLayout.setVisibility(LinearLayout.VISIBLE);
                     // Hide keyboard
                     if (view != null) {
-                        InputMethodManager manager= (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
                 }
             }
         });
 
-        // Continue to order history button
+        // Continue to login button
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Switch to order history layout
                 if (validateOTP() && OTPInput.getEditText().getText().toString().trim().equals("123456")) {
                     Toast.makeText(StaffLoginActivity.this, "Login successfully!", Toast.LENGTH_SHORT).show();
-                    finish();
                     // Hide keyboard
                     if (view != null) {
-                        InputMethodManager manager= (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
+//                    Intent intent = new Intent (StaffLoginActivity.this, HomeActivity.class);
+//                    intent.putExtra("logined", true);
+//                    setResult(RESULT_OK, intent);
+
+                    SharedPreferences sharedPref = getSharedPreferences("application", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("CURRENT_ACCOUNT", "Le Minh Duc");
+                    editor.apply();
+
+                    finish();
 
                 } else if (!OTPInput.getEditText().getText().toString().trim().equals("123456")) {
                     OTPInput.setError("Wrong verification code");

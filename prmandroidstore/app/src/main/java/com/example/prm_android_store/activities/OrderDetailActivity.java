@@ -43,7 +43,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     // Init order, customer, order item list
     private Customer loginedCustomer = new Customer(1, "Minh Duc", "Le", "leduchien09@gmail.com", "0931856541", "Ho Chi Minh city", "Viet Nam", "Phuoc Long B ward", 70000);
-    private Order currentOrder = new Order(2, 1, 3, 6400000, "02/22/2022", "02/25/2022", null, loginedCustomer);
+    private Order currentOrder = new Order(2, 1, 3, 63970000, "02/22/2022", "02/25/2022", null, loginedCustomer);
     private ArrayList<OrderItem> orderItems = new ArrayList<OrderItem>();
 
     @Override

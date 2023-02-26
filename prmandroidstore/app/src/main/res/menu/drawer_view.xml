@@ -13,5 +13,9 @@
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_baseline_receipt_24"
             android:title="Order history" />
+        <item
+            android:id="@+id/nav_search_customer"
+            android:icon="@drawable/ic_baseline_people_24"
+            android:title="Search for Customer" />
     </group>
 </menu>

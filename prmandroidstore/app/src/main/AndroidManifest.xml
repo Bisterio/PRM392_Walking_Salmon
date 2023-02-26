@@ -16,6 +16,13 @@
         android:theme="@style/Theme.Prmandroidstore"
         tools:targetApi="31">
         <activity
+            android:name=".activities.CustomerSearchActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activities.StaffLoginActivity"
             android:exported="false">
             <meta-data

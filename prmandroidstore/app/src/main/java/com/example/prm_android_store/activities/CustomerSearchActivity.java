@@ -1,13 +1,9 @@
 package com.example.prm_android_store.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,77 +12,56 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.prm_android_store.R;
-import com.example.prm_android_store.adapters.OrderListAdapter;
-import com.example.prm_android_store.adapters.ProductListAdapter;
-import com.example.prm_android_store.data.CartItem;
 import com.example.prm_android_store.data.Customer;
-import com.example.prm_android_store.data.Order;
-import com.example.prm_android_store.data.OrderItem;
 import com.google.android.material.textfield.TextInputLayout;
-import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-
-public class OrderHistoryActivity extends AppCompatActivity {
+public class CustomerSearchActivity extends AppCompatActivity {
 
     // Init view
     private ImageView backArrow;
-    private TextView continueButton;
-    private LinearLayout phoneInputLayout;
-    private NestedScrollView orderHistoryLayout;
-    private TextInputLayout phoneInput;
     private TextView customerName;
     private TextView customerEmail;
     private TextView customerPhone;
-    private RecyclerView orderListRecyclerView;
+    private TextView customerAddress;
+    private LinearLayout customerInformationLayout;
+    private LinearLayout notFoundLayout;
+    private TextInputLayout phoneInput;
+    private TextView searchButton;
+    private TextView addExistingCustomerButton;
+    private TextView addNewCustomerButton;
 
     // Init data
-    private final Customer loginedCustomer = new Customer(1, "Minh Duc", "Le", "leduchien09@gmail.com", "0931856541", "Ho Chi Minh city", "Viet Nam", "Phuoc Long B ward", 70000);
-    private final ArrayList<Order> orderList = new ArrayList<>();
+    private Customer searchedCustomer = new Customer(1, "Duc", "Le", "leduchien09@gmail.com", "0931856541", "Ho Chi Minh city", "Vietnam", "Phuoc Long B Ward", 70000);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_history);
+        setContentView(R.layout.activity_customer_search);
 
         // Set up view and listener
         setupUI();
         setupListener();
-
-    }
-
-    private void buildOrderListRecyclerView() {
-        // Init recycler view adapter and layout manager
-        OrderListAdapter orderListAdapter = new OrderListAdapter(OrderHistoryActivity.this, orderList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        orderListRecyclerView.setHasFixedSize(true);
-        orderListRecyclerView.setLayoutManager(linearLayoutManager);
-        orderListRecyclerView.setAdapter(orderListAdapter);
-    }
-
-    private void initOrderList() {
-        orderList.add(new Order(2, 1, 1, 6400000, "02/22/2022", "02/25/2022", null, loginedCustomer));
-        orderList.add(new Order(1, 4, 3, 12380000, "05/03/2022", "05/05/2022", "05/04/2022", loginedCustomer));
     }
 
     private void setupUI() {
         // Find View
         backArrow = findViewById(R.id.ivBackArrow);
-        continueButton = findViewById(R.id.tvContinueButton);
-        phoneInputLayout = findViewById(R.id.phoneInputLayout);
         phoneInput = findViewById(R.id.tilPhone);
-        orderHistoryLayout = findViewById(R.id.orderHistoryLayout);
         customerName = findViewById(R.id.tvCustomerName);
         customerEmail = findViewById(R.id.tvCustomerEmail);
         customerPhone = findViewById(R.id.tvCustomerPhone);
-        orderListRecyclerView = findViewById(R.id.rvOrderList);
+        customerAddress = findViewById(R.id.tvCustomerAddress);
+        customerInformationLayout = findViewById(R.id.customerInformationLayout);
+        notFoundLayout = findViewById(R.id.notFoundLayout);
+        searchButton = findViewById(R.id.tvSearchButton);
+        addExistingCustomerButton = findViewById(R.id.tvAddExistingCustomerButton);
+        addNewCustomerButton = findViewById(R.id.tvAddNewCustomerButton);
 
         // Set Layout visibility
-        phoneInputLayout.setVisibility(LinearLayout.VISIBLE);
-        orderHistoryLayout.setVisibility(LinearLayout.GONE);
+        customerInformationLayout.setVisibility(LinearLayout.GONE);
+        notFoundLayout.setVisibility(LinearLayout.GONE);
     }
 
     private void setupListener() {
@@ -98,14 +73,14 @@ public class OrderHistoryActivity extends AppCompatActivity {
             }
         });
 
-        // Continue to otp input button
-        continueButton.setOnClickListener(new View.OnClickListener() {
+        // Search
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Switch to OTP input layout
-                if (validatePhone()) {
-                    phoneInputLayout.setVisibility(LinearLayout.GONE);
-                    orderHistoryLayout.setVisibility(LinearLayout.VISIBLE);
+                if (validatePhone() && phoneInput.getEditText().getText().toString().trim().equals("0123456789")) {
+                    notFoundLayout.setVisibility(LinearLayout.GONE);
+                    customerInformationLayout.setVisibility(LinearLayout.VISIBLE);
                     // Hide keyboard
                     if (view != null) {
                         InputMethodManager manager= (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -113,13 +88,13 @@ public class OrderHistoryActivity extends AppCompatActivity {
                     }
 
                     // Get logined user info
-                    customerName.setText(loginedCustomer.getLast_name() + " " + loginedCustomer.getFirst_name());
-                    customerEmail.setText(loginedCustomer.getEmail());
-                    customerPhone.setText(loginedCustomer.getPhone());
-
-                    // Get orders info
-                    initOrderList();
-                    buildOrderListRecyclerView();
+                    customerName.setText(searchedCustomer.getLast_name() + " " + searchedCustomer.getFirst_name());
+                    customerEmail.setText(searchedCustomer.getEmail());
+                    customerPhone.setText(searchedCustomer.getPhone());
+                    customerAddress.setText(searchedCustomer.getStreet() + ", " + searchedCustomer.getCity() + ", " + searchedCustomer.getState());
+                } else {
+                    notFoundLayout.setVisibility(LinearLayout.VISIBLE);
+                    customerInformationLayout.setVisibility(LinearLayout.GONE);
                 }
             }
         });
@@ -137,6 +112,26 @@ public class OrderHistoryActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 validatePhone();
+            }
+        });
+
+        // Add existing customer button
+        addExistingCustomerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent intent = new Intent(CustomerSearchActivity.this, CartActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Add new customer button
+        addNewCustomerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent intent = new Intent(CustomerSearchActivity.this, CartActivity.class);
+                startActivity(intent);
             }
         });
     }

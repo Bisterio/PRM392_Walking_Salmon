@@ -1,5 +1,9 @@
 package com.example.prm_android_store.activities;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -10,9 +14,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +40,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener{
+        NavigationView.OnNavigationItemSelectedListener {
 
     // Init view
     private RecyclerView productListRecyclerView;
@@ -46,8 +54,11 @@ public class HomeActivity extends AppCompatActivity implements
     private TextView staffLoginButton;
 
     // Init list
-    private ArrayList<Product> productList = new ArrayList<>();
-    private ArrayList<Category> categoryList = new ArrayList<>();
+    private final ArrayList<Product> productList = new ArrayList<>();
+    private final ArrayList<Category> categoryList = new ArrayList<>();
+
+    // Init shared preferrence data
+    private boolean isStaff = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +69,11 @@ public class HomeActivity extends AppCompatActivity implements
         setupUI();
         setupListener();
 
+        // Staff authorization
+        if (isStaff) {
+            staffLoginButton.setText("Logout");
+        }
+
         // Init list
         initCategoryList();
         initProductList();
@@ -67,7 +83,7 @@ public class HomeActivity extends AppCompatActivity implements
         buildProductRecyclerView();
     }
 
-    private void setupUI(){
+    private void setupUI() {
         // Find View
         productListRecyclerView = findViewById(R.id.rvProductList);
         categoryListRecyclerView = findViewById(R.id.rvCategoryList);
@@ -77,13 +93,17 @@ public class HomeActivity extends AppCompatActivity implements
         navView = findViewById(R.id.nav_view);
         if (navView != null) {
             navView.setNavigationItemSelectedListener(this);
+            if (!isStaff) {
+                Menu nav_Menu = navView.getMenu();
+                nav_Menu.findItem(R.id.nav_search_customer).setVisible(false);
+            }
         }
         menuButton = findViewById(R.id.ivMenu);
         drawerLayout = findViewById(R.id.drawer_layout);
         staffLoginButton = findViewById(R.id.nav_footer_staff);
     }
 
-    private void setupListener(){
+    private void setupListener() {
         // Search view handle
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -131,18 +151,27 @@ public class HomeActivity extends AppCompatActivity implements
         staffLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, StaffLoginActivity.class);
-                startActivity(intent);
+                if (!isStaff) {
+                    Intent intent = new Intent(HomeActivity.this, StaffLoginActivity.class);
+                    startActivity(intent);
+                } else {
+                    isStaff = false;
+                    SharedPreferences sharedPref = getSharedPreferences("application", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.remove("CURRENT_ACCOUNT");
+                    editor.apply();
+                    finish();
+                    startActivity(getIntent());
+                }
             }
         });
     }
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-        }
-        else{
+        } else {
             super.onBackPressed();
         }
     }
@@ -164,7 +193,7 @@ public class HomeActivity extends AppCompatActivity implements
         categoryListRecyclerView.setAdapter(categoryListAdapter);
     }
 
-    private void initCategoryList(){
+    private void initCategoryList() {
         categoryList.add(new Category(1, "TV", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//content/Tivi-128x129.png"));
         categoryList.add(new Category(2, "Refrigerator", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//content/Tulanh-128x129.png"));
         categoryList.add(new Category(3, "Air Conditioner", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//content/Maylanh-128x129-128x129-1.png"));
@@ -176,7 +205,7 @@ public class HomeActivity extends AppCompatActivity implements
         categoryList.add(new Category(9, "Household", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//content/Diengiadung-128x129.png"));
     }
 
-    private void initProductList(){
+    private void initProductList() {
         productList.add(new Product(1, "Iphone 14 Pro Max", "iPhone 14 has the same superspeedy chip that’s in iPhone 13 Pro. A15 Bionic, with a 5‑core GPU, powers all the latest features and makes graphically intense games and AR apps feel ultrafluid. An updated internal design delivers better thermal efficiency, so you can stay in the action longer.", "https://cdn.tgdd.vn/Products/Images/42/153856/iphone-11-trang-600x600.jpg", 2022, 29490000, new Brand(1, "Apple"), new Category(8, "Phone", ""), "created_at", "updated_at"));
         productList.add(new Product(2, "Smart TV Casper 43 inch 43FX6200", "Simple and elegant designCasper tivi 43 inch 43FX6200 is designed simplified, luxurious with an edge-to-edge screen that offers a perfect visual experience.", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/1942/234997/casper-43fx6200-1-550x340.jpg", 2020, 4990000, new Brand(2, "Casper"), new Category(1, "TV", ""), "created_at", "updated_at"));
         productList.add(new Product(3, "Samsung Inverter Fridge 647 liters RS62R5001B4/SV", "Samsung Inverter 647 liter refrigerator RS62R5001B4 / SV is a stylish, classy black refrigerator. Also, the fridge has two luxurious wide-open doors, not only a highlight for interior space but also helps you conveniently observe, find and arrange food.", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/1943/201134/samsung-rs62r5001b4-sv-19-300x300.jpg", 2019, 23990000, new Brand(3, "Samsung"), new Category(2, "Refrigerator", ""), "created_at", "updated_at"));
@@ -206,6 +235,24 @@ public class HomeActivity extends AppCompatActivity implements
             startActivity(intent);
         }
 
+        if (id == R.id.nav_search_customer) {
+            intent = new Intent(HomeActivity.this, CustomerSearchActivity.class);
+            startActivity(intent);
+        }
+
         return false;
+    }
+
+    @Override
+    protected void onResume() {
+        SharedPreferences sharedPref = getSharedPreferences("application", Context.MODE_PRIVATE);
+        if (!sharedPref.getString("CURRENT_ACCOUNT", "").trim().isEmpty()) {
+            isStaff = true;
+            staffLoginButton.setText("Logout");
+            Menu nav_Menu = navView.getMenu();
+            nav_Menu.findItem(R.id.nav_search_customer).setVisible(true);
+        }
+
+        super.onResume();
     }
 }
