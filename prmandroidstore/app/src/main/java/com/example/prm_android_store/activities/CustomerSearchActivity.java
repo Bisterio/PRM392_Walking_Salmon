@@ -78,7 +78,7 @@ public class CustomerSearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Switch to OTP input layout
-                if (validatePhone() && phoneInput.getEditText().getText().toString().trim().equals("0123456789")) {
+                if (validatePhone() && phoneInput.getEditText().getText().toString().trim().equals("0931856541")) {
                     notFoundLayout.setVisibility(LinearLayout.GONE);
                     customerInformationLayout.setVisibility(LinearLayout.VISIBLE);
                     // Hide keyboard
