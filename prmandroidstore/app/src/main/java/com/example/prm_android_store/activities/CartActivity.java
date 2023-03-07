@@ -40,6 +40,7 @@ public class CartActivity extends AppCompatActivity {
     private TextView totalPrice;
     private TextView orderButton;
     private TextView totalPriceBottom;
+    private TextView cartEmpty;
     private TextInputLayout customerFirstNameInput;
     private TextInputLayout customerLastNameInput;
     private TextInputLayout customerEmailInput;
@@ -70,6 +71,16 @@ public class CartActivity extends AppCompatActivity {
 
         // Set up cart list
         initCartList();
+        //cartList.clear();
+
+        // Handle cart empty
+        if(cartList.isEmpty()){
+            cartListRecyclerView.setVisibility(View.GONE);
+            cartEmpty.setVisibility(View.VISIBLE);
+        } else {
+            cartListRecyclerView.setVisibility(View.VISIBLE);
+            cartEmpty.setVisibility(View.GONE);
+        }
 
         // Handle cart information
         totalQuantity.setText("Total prices (" + calculatedCartQuantity() + " products):");
@@ -125,6 +136,7 @@ public class CartActivity extends AppCompatActivity {
         customerStreetInput = findViewById(R.id.tilStreet);
         customerZipCodeInput = findViewById(R.id.tilZipCode);
         searchCustomerButton = findViewById(R.id.tvSearchCustomerCart);
+        cartEmpty = findViewById(R.id.tvEmptyCart);
     }
 
     private void setupListener(){

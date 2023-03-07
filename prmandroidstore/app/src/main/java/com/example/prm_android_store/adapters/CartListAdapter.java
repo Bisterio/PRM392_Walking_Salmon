@@ -63,10 +63,11 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.CartIt
     }
 
 
-    class CartItemViewHolder extends RecyclerView.ViewHolder {
+    class CartItemViewHolder extends RecyclerView.ViewHolder{
 
         TextView textViewProductID, textViewProductName, textViewProductBrand, textViewPrice, textViewQuantity;
         ImageView imageView;
+        TextView removeButton, increaseQuantityButton, decreaseQuantityButton;
 
         public CartItemViewHolder(View itemView) {
             super(itemView);
@@ -77,6 +78,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.CartIt
             textViewQuantity = itemView.findViewById(R.id.tvQuantity);
             textViewPrice = itemView.findViewById(R.id.tvProductPrice);
             imageView = itemView.findViewById(R.id.ivProduct);
+            removeButton = itemView.findViewById(R.id.tvItemRemoveButton);
+            increaseQuantityButton = itemView.findViewById(R.id.tvAddQuantity);
+            decreaseQuantityButton = itemView.findViewById(R.id.tvSubQuantity);
         }
     }
 }
