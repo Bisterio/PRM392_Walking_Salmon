@@ -52,7 +52,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         //binding the data with the viewholder views
         holder.textViewProductID.setText(String.valueOf(product.getId()));
         holder.textViewProductName.setText(product.getName());
-        holder.textViewProductBrand.setText(product.getBrand().getName());
+        holder.textViewProductBrand.setText(product.getBrand());
         holder.textViewModelYear.setText(String.valueOf(product.getModel_year()));
         holder.textViewPrice.setText(String.format("%,.0f", product.getList_price()) + "₫");
 
@@ -90,13 +90,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             Intent detail = new Intent(mCtx, ProductDetailActivity.class);
             detail.putExtra("search", searchQuery);
             detail.putExtra("productId", productList.get(position).getId());
-            detail.putExtra("productName", productList.get(position).getName());
-            detail.putExtra("productImage", productList.get(position).getImage());
-            detail.putExtra("productPrice", productList.get(position).getList_price());
-            detail.putExtra("productBrand", productList.get(position).getBrand().getName());
-            detail.putExtra("productCategory", productList.get(position).getCategory().getName());
-            detail.putExtra("productModelYear", productList.get(position).getModel_year());
-            detail.putExtra("productDescription", productList.get(position).getDescription());
             mCtx.startActivity(detail);
         }
     }

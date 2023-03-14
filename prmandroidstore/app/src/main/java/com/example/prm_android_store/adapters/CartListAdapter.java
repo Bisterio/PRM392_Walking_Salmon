@@ -49,7 +49,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.CartIt
         // Binding the data with the viewholder views
         holder.textViewProductID.setText(String.valueOf(cartItem.getProduct().getId()));
         holder.textViewProductName.setText(cartItem.getProduct().getName());
-        holder.textViewProductBrand.setText(cartItem.getProduct().getBrand().getName());
+        holder.textViewProductBrand.setText(cartItem.getProduct().getBrand());
         holder.textViewQuantity.setText(String.valueOf(cartItem.getQuantity()));
         holder.textViewPrice.setText(String.format("%,.0f", cartItem.getProduct().getList_price()) + "₫");
 

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
 import com.example.prm_android_store.R;
+import com.example.prm_android_store.data.Product;
+import com.example.prm_android_store.utils.ProductAPI;
 import com.squareup.picasso.Picasso;
 
 import android.content.Intent;
@@ -11,6 +13,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
@@ -27,6 +36,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     private SearchView searchView;
     private ImageView cartIcon;
 
+    // Init data
+    private Product product = new Product();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +46,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         // Get data from intent
         Intent intent = getIntent();
+        product.setId(intent.getLongExtra("productId", 0));
 
         // Set up view and listener
         setupUI();
@@ -44,15 +57,20 @@ public class ProductDetailActivity extends AppCompatActivity {
             searchView.setQuery(intent.getStringExtra("search"), false);
         }
 
+        // Get Product detail
+        getProductDetail();
+    }
+
+    private void setProductDataToView(Product response){
         // Set data for view
-        Picasso.get().load(intent.getStringExtra("productImage")).into(productImage);
-        productId.setText(intent.getStringExtra("productId"));
-        productName.setText(intent.getStringExtra("productName"));
-        productPrice.setText(String.format("%,.0f", intent.getDoubleExtra("productPrice", 0f)) + "đ");
-        productBrand.setText("Brand: " +intent.getStringExtra("productBrand"));
-        productCategory.setText("Category: " +intent.getStringExtra("productCategory"));
-        productModelYear.setText("Model Year: " + String.valueOf(intent.getIntExtra("productModelYear", 0)));
-        productDescription.setText(intent.getStringExtra("productDescription"));
+        Picasso.get().load(response.getImage()).into(productImage);
+        productId.setText(String.valueOf(response.getId()));
+        productName.setText(response.getName());
+        productPrice.setText(String.format("%,.0f đ", response.getList_price()));
+        productBrand.setText("Brand: " + response.getBrand());
+        productCategory.setText("Category: " + response.getCategory_name());
+        productModelYear.setText("Model Year: " + String.valueOf(response.getModel_year()));
+        productDescription.setText(response.getDescription());
     }
 
     private void setupUI(){
@@ -104,5 +122,23 @@ public class ProductDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void getProductDetail() {
+        ProductAPI.productApi.getById(product.getId()).enqueue(
+                new Callback<Product>() {
+                    @Override
+                    public void onResponse(Call<Product> call, Response<Product> response) {
+                        product = response.body();
+                        setProductDataToView(product);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Product> call, Throwable t) {
+                        Toast.makeText(ProductDetailActivity.this, "Can't find this product!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+        );
     }
 }

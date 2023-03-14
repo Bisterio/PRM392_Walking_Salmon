@@ -72,7 +72,11 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srlProductList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv"
         android:background="#F6F6F6"
@@ -94,16 +98,7 @@
                 android:orientation="vertical"
                 android:padding="16dp"
                 android:layout_marginBottom="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Filter"
-                    android:padding="10dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/black"
-                    android:drawableStart="@drawable/ic_baseline_filter_alt_24"
-                    android:drawablePadding="5dp"
-                    android:background="@drawable/filter_button_style"/>
+
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/cgFilter"
                     android:layout_width="wrap_content"
@@ -124,7 +119,6 @@
                     android:id="@+id/tvProductsNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10 products"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:paddingStart="16dp"
@@ -146,8 +140,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
+            <ProgressBar
+                android:id="@+id/pbLoading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

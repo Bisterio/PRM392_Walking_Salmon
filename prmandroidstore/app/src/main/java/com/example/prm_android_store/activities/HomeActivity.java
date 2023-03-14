@@ -1,9 +1,5 @@
 package com.example.prm_android_store.activities;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -14,13 +10,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,14 +28,21 @@ import com.example.prm_android_store.adapters.ProductListAdapter;
 import com.example.prm_android_store.data.Brand;
 import com.example.prm_android_store.data.Category;
 import com.example.prm_android_store.data.Product;
+import com.example.prm_android_store.utils.ProductAPI;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
 
     // Init view
+    private NestedScrollView nestedScrollView;
     private RecyclerView productListRecyclerView;
     private RecyclerView categoryListRecyclerView;
     private SearchView searchView;
@@ -52,12 +52,16 @@ public class HomeActivity extends AppCompatActivity implements
     private DrawerLayout drawerLayout;
     private ImageView menuButton;
     private TextView staffLoginButton;
+    private ProgressBar loadingPB;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     // Init list
-    private final ArrayList<Product> productList = new ArrayList<>();
-    private final ArrayList<Category> categoryList = new ArrayList<>();
+    private List<Product> productList = new ArrayList<>();
+    private ArrayList<Category> categoryList = new ArrayList<>();
 
-    // Init shared preferrence data
+    // Init data
+    private boolean hasNext = true;
+    private int page = 1;
     private boolean isStaff = false;
 
     @Override
@@ -76,21 +80,64 @@ public class HomeActivity extends AppCompatActivity implements
 
         // Init list
         initCategoryList();
-        initProductList();
-
-        // Build recycler view
         buildCategoryRecyclerView();
-        buildProductRecyclerView();
+
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                productList.clear();
+                getProductList();
+            }
+        });
+
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
+                    if (hasNext) {
+                        page++;
+                        loadingPB.setVisibility(View.VISIBLE);
+                        getProductList();
+                    }
+                }
+            }
+        });
+    }
+
+    private void getProductList() {
+        ProductAPI.productApi.getAllProductPaginatedSearchName(page, 8, "").enqueue(
+                new Callback<List<Product>>() {
+                    @Override
+                    public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                        productList.addAll(response.body());
+                        buildProductRecyclerView();
+                        swipeRefreshLayout.setRefreshing(false);
+                        if(response.body().size() < 8){
+                            hasNext = false;
+                            loadingPB.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Product>> call, Throwable t) {
+                        productList.clear();
+                    }
+                }
+        );
     }
 
     private void setupUI() {
         // Find View
+        nestedScrollView = findViewById(R.id.nsv);
         productListRecyclerView = findViewById(R.id.rvProductList);
         categoryListRecyclerView = findViewById(R.id.rvCategoryList);
         searchView = findViewById(R.id.searchView);
         viewAll = findViewById(R.id.tvViewAll);
         cartIcon = findViewById(R.id.ivCartIcon);
         navView = findViewById(R.id.nav_view);
+        loadingPB = findViewById(R.id.pbLoading);
+        swipeRefreshLayout = findViewById(R.id.srlProductList);
         if (navView != null) {
             navView.setNavigationItemSelectedListener(this);
             if (!isStaff) {
@@ -206,16 +253,6 @@ public class HomeActivity extends AppCompatActivity implements
         categoryList.add(new Category(9, "Household", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn//content/Diengiadung-128x129.png"));
     }
 
-    private void initProductList() {
-        productList.add(new Product(1, "Iphone 14 Pro Max", "iPhone 14 has the same superspeedy chip that’s in iPhone 13 Pro. A15 Bionic, with a 5‑core GPU, powers all the latest features and makes graphically intense games and AR apps feel ultrafluid. An updated internal design delivers better thermal efficiency, so you can stay in the action longer.", "https://cdn.tgdd.vn/Products/Images/42/153856/iphone-11-trang-600x600.jpg", 2022, 29490000, new Brand(1, "Apple"), new Category(8, "Phone", ""), "created_at", "updated_at"));
-        productList.add(new Product(2, "Smart TV Casper 43 inch 43FX6200", "Simple and elegant designCasper tivi 43 inch 43FX6200 is designed simplified, luxurious with an edge-to-edge screen that offers a perfect visual experience.", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/1942/234997/casper-43fx6200-1-550x340.jpg", 2020, 4990000, new Brand(2, "Casper"), new Category(1, "TV", ""), "created_at", "updated_at"));
-        productList.add(new Product(3, "Samsung Inverter Fridge 647 liters RS62R5001B4/SV", "Samsung Inverter 647 liter refrigerator RS62R5001B4 / SV is a stylish, classy black refrigerator. Also, the fridge has two luxurious wide-open doors, not only a highlight for interior space but also helps you conveniently observe, find and arrange food.", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/1943/201134/samsung-rs62r5001b4-sv-19-300x300.jpg", 2019, 23990000, new Brand(3, "Samsung"), new Category(2, "Refrigerator", ""), "created_at", "updated_at"));
-        productList.add(new Product(4, "Toshiba Inverter 8.5 Kg TW-BH95S2V WK", "Toshiba Inverter 8.5 Kg TW-BH95S2V WK washing machine has an elegant and neutral white color, combined with a modern front door design, promising to bring the interior space of the family with exquisite beauty and elegance.", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/1944/197893/toshiba-tw-bh95s2v-wk-10-300x300.jpg", 2019, 7490000, new Brand(4, "Toshiba"), new Category(4, "Washing Machine", ""), "created_at", "updated_at"));
-        productList.add(new Product(5, "Daikin Inverter 1 HP FTKB25WMVMV", "Daikin Inverter 1 HP FTKB25WVMMV air conditioner is a line of air conditioners with Inverter technology to help save energy. In particular, the outdoor unit and indoor unit are improved to help the machine operate smoothly, stably, and achieve optimal capacity. In addition, owns Enzyme Blue filter combined with PM2.5 fine dust filter to remove odor-causing agents, allergens, and mold.", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/2002/271496/daikin-inverter-1-hp-ftkb25wmvmv31-550x160.jpg", 2018, 10990000, new Brand(5, "Daikin"), new Category(3, "Air Conditioner", ""), "created_at", "updated_at"));
-        productList.add(new Product(6, "Smart TV Samsung 4K Crystal UHD 50 inch UA50AU8100", "Smart TV Samsung 4K 50 inch UA50AU8100 owns AirSlim design, slim frame, ultra-thin border feels like 3-sided borderless, super thin border for overall delicate TV, wide screen, adding aesthetics for living space. The stand is flexible, easy to change the height to fit many different interior designs and TV shelves.", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/1942/235791/led-4k-samsung-ua50au8100-221122-040529-550x340.jpg", 2021, 9890000, new Brand(3, "Samsung"), new Category(1, "TV", ""), "created_at", "updated_at"));
-        productList.add(new Product(7, "LG Inverter 266 Lít GV-B262WB", "LG Inverter refrigerator 266 liters GV-B262WB has the ability to save electricity effectively and operate smoothly. Moreover, this refrigerator model can maintain optimal food freshness and cool drinks when placed on the side of the refrigerator door thanks to special technologies.", "https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/1943/284312/tu-lanh-lg-inverter-266-lit-gv-b262wb50-600x600.jpg", 2020, 6690000, new Brand(6, "LG"), new Category(2, "Refrigerator", ""), "created_at", "updated_at"));
-    }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -255,5 +292,13 @@ public class HomeActivity extends AppCompatActivity implements
         }
 
         super.onResume();
+    }
+
+    @Override
+    public void onRefresh() {
+        page = 1;
+        hasNext = true;
+        productList.clear();
+        getProductList();
     }
 }

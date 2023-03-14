@@ -44,9 +44,9 @@ public class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdap
         // Getting the product of the specified position
         OrderItem orderItem = orderItemList.get(position);
 
-        // Binding the data with the viewholder views
+        // Binding the data with the view holder views
         holder.textViewProductName.setText(orderItem.getProduct().getName());
-        holder.textViewProductBrand.setText(orderItem.getProduct().getBrand().getName());
+        holder.textViewProductBrand.setText(orderItem.getProduct().getBrand());
         holder.textViewQuantity.setText("Quantity: " + String.valueOf(orderItem.getQuantity()));
         holder.textViewPrice.setText(String.format("%,.0f", orderItem.getProduct().getList_price()) + "₫");
 

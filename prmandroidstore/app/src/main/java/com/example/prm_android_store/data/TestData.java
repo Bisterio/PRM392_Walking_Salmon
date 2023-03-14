@@ -1,28 +1,26 @@
 package com.example.prm_android_store.data;
 
-public class Product {
+public class TestData {
     private long id;
     private String name;
-    private String description;
     private String image;
+    private String description;
     private int model_year;
     private double list_price;
-    private long category_id;
-    private String category_name;
-    private String brand;
+    private long category;
+    private long brand;
 
-    public Product() {
+    public TestData() {
     }
 
-    public Product(long id, String name, String description, String image, int model_year, double list_price, long category_id, String category_name, String brand) {
+    public TestData(long id, String name, String image, String description, int model_year, double list_price, long category, long brand) {
         this.id = id;
         this.name = name;
-        this.description = description;
         this.image = image;
+        this.description = description;
         this.model_year = model_year;
         this.list_price = list_price;
-        this.category_id = category_id;
-        this.category_name = category_name;
+        this.category = category;
         this.brand = brand;
     }
 
@@ -42,20 +40,20 @@ public class Product {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getImage() {
         return image;
     }
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getModel_year() {
@@ -74,28 +72,19 @@ public class Product {
         this.list_price = list_price;
     }
 
-    public long getCategory_id() {
-        return category_id;
+    public long getCategory() {
+        return category;
     }
 
-    public void setCategory_id(long category_id) {
-        this.category_id = category_id;
+    public void setCategory(long category) {
+        this.category = category;
     }
 
-    public String getCategory_name() {
-        return category_name;
-    }
-
-    public void setCategory_name(String category_name) {
-        this.category_name = category_name;
-    }
-
-    public String getBrand() {
+    public long getBrand() {
         return brand;
     }
 
-    public void setBrand(String brand) {
+    public void setBrand(long brand) {
         this.brand = brand;
     }
 }
-
